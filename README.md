@@ -1,5 +1,9 @@
 # Красное море: открытый офлайн-определитель
 
+> **📘 [Скачать готовый офлайн-PDF v0.1.0 (66 стр., 190 фотографий, 42 МБ)](https://github.com/andreykulakovskiy/red-sea-field-guide/releases/download/v0.1.0/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf)**
+>
+> **[Все релизы](https://github.com/andreykulakovskiy/red-sea-field-guide/releases)** · [Авторы и лицензии фотографий](https://github.com/andreykulakovskiy/red-sea-field-guide/releases/download/v0.1.0/PHOTO_CREDITS.csv) · [Список фотографий, которых пока нет](https://github.com/andreykulakovskiy/red-sea-field-guide/releases/download/v0.1.0/MISSING_PHOTOS.txt)
+
 Русскоязычный полевой определитель кораллов, рыб, моллюсков и ракообразных для района **Faraana Reef / Temple / Ras Katy / Ras Um Sid**. В исходных данных **98 видов и групп**. PDF собирается с **реальными фотографиями из Wikimedia Commons, встроенными прямо в документ**; открывать фото в интернете после сборки не требуется.
 
 ## Самый простой способ: без установки Python — GitHub Actions
