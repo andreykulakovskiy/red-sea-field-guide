@@ -1,0 +1,982 @@
+[
+  {
+    "id": "acropora-spp",
+    "section": "coral",
+    "ru": "Акропоры",
+    "scientific": "Acropora spp.",
+    "hook": "Ветви или плоские «столы»; кончики иногда голубые. Крупный выступающий кораллит на концах ветвей.",
+    "where": "Склон и колонии на кромке рифа",
+    "frequency": "часто",
+    "flag": "ТВОЯ НАХОДКА"
+  },
+  {
+    "id": "stylophora-pistillata",
+    "section": "coral",
+    "ru": "Стилофора",
+    "scientific": "Stylophora pistillata",
+    "hook": "Плотный куст из коротких округлых «пальцев»; розовая, фиолетовая, бежевая.",
+    "where": "Светлые участки склона",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "pocillopora-verrucosa",
+    "section": "coral",
+    "ru": "Поциллопора",
+    "scientific": "Pocillopora verrucosa",
+    "hook": "Ветви с отчётливыми бугорками, похожими на цветную капусту.",
+    "where": "Кромка и склон",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "seriatopora-hystrix",
+    "section": "coral",
+    "ru": "Сериатопора",
+    "scientific": "Seriatopora hystrix",
+    "hook": "Очень тонкие, переплетённые острые веточки — «птичье гнездо».",
+    "where": "Защищённые участки склона",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "porites-spp",
+    "section": "coral",
+    "ru": "Поритес",
+    "scientific": "Porites spp.",
+    "hook": "Массивный гладковатый купол; издали почти камень, вблизи — мелкие поры-полипы.",
+    "where": "Плато и внешний склон",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "platygyra-daedalea",
+    "section": "coral",
+    "ru": "Мозговик",
+    "scientific": "Platygyra daedalea",
+    "hook": "Меандры и извилистые гребни, словно лабиринт на поверхности шара.",
+    "where": "Склон, твёрдый субстрат",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "lobophyllia-spp",
+    "section": "coral",
+    "ru": "Лобофиллия",
+    "scientific": "Lobophyllia spp.",
+    "hook": "Мясистые крупные полипы, глубокие складки; иногда красноватая или зелёная.",
+    "where": "Склон, укрытые места",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "montipora-spp",
+    "section": "coral",
+    "ru": "Монтипора",
+    "scientific": "Montipora spp.",
+    "hook": "Тонкие пластины, уступы или обрастающая корка; поры гораздо мельче, чем у акропор.",
+    "where": "Склон и вертикали",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "turbinaria-reniformis",
+    "section": "coral",
+    "ru": "Турбинария",
+    "scientific": "Turbinaria reniformis",
+    "hook": "Жёлто-бурые завитые чаши и полки; форма напоминает свёрнутые листья.",
+    "where": "Склон, уступы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "millepora-spp",
+    "section": "coral",
+    "ru": "Огненный коралл",
+    "scientific": "Millepora spp.",
+    "hook": "Жёлто-бурые пластинки или ветви; на самом деле гидрокоралл. Очень болезненно жалит.",
+    "where": "Мелководье и кромка",
+    "frequency": "часто",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "plerogyra-sinuosa",
+    "section": "coral",
+    "ru": "Пузырчатый коралл",
+    "scientific": "Plerogyra sinuosa",
+    "hook": "Гроздья полупрозрачных пузырьков, обычно в полутени.",
+    "where": "Ниши и навесы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "xenia-spp",
+    "section": "coral",
+    "ru": "Ксения",
+    "scientific": "Xenia spp.",
+    "hook": "Мягкие «ладошки» полипов; у некоторых видов щупальца ритмично сокращаются.",
+    "where": "Плато и склон",
+    "frequency": "часто",
+    "flag": "ВАУ: ПУЛЬСИРУЕТ"
+  },
+  {
+    "id": "sarcophyton-spp",
+    "section": "coral",
+    "ru": "Кожистый коралл",
+    "scientific": "Sarcophyton spp.",
+    "hook": "Грибовидная шляпка с множеством тонких мягких полипов.",
+    "where": "Защищённые места",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "sea-fans---gorgonacea",
+    "section": "coral",
+    "ru": "Горгонария",
+    "scientific": "Sea fans / Gorgonacea",
+    "hook": "Большой сетчатый веер, часто поперёк потока воды. Не путай с водорослями.",
+    "where": "Глубже, на свалах Ras Um Sid",
+    "frequency": "иногда",
+    "flag": "ВАУ: МАСШТАБ"
+  },
+  {
+    "id": "heliopora-coerulea",
+    "section": "coral",
+    "ru": "Синий коралл",
+    "scientific": "Heliopora coerulea",
+    "hook": "Название обманчиво: живая поверхность обычно буроватая; синий — скелет внутри.",
+    "where": "В Красном море отмечен, локально не гарантирован",
+    "frequency": "редко",
+    "flag": "НЕ ПУТАТЬ С АКРОПОРОЙ"
+  },
+  {
+    "id": "acropora-cytherea",
+    "section": "coral",
+    "ru": "Столовидная акропора",
+    "scientific": "Acropora cytherea",
+    "hook": "Широкая горизонтальная тарелка с ветвями по краям, обычно выше кромки рифа.",
+    "where": "Открытый склон, рельефная стенка",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "acropora-humilis",
+    "section": "coral",
+    "ru": "Короткопалая акропора",
+    "scientific": "Acropora humilis",
+    "hook": "Короткие толстые ветви, часто контрастные цветные кончики.",
+    "where": "Неглубокий склон",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "goniopora-spp",
+    "section": "coral",
+    "ru": "Гониопора",
+    "scientific": "Goniopora spp.",
+    "hook": "Колония из длинных отдельных полипов, будто плотная лужайка цветов.",
+    "where": "Защищённые участки",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "favites-spp",
+    "section": "coral",
+    "ru": "Фавитес",
+    "scientific": "Favites spp.",
+    "hook": "Ячеистый массивный коралл: у соседних полипов общие стенки.",
+    "where": "Твёрдые основания на склоне",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "echinopora-lamellosa",
+    "section": "coral",
+    "ru": "Эхинопора",
+    "scientific": "Echinopora lamellosa",
+    "hook": "Тонкие листовидные пластинки с заметными чашечками-пупырышками.",
+    "where": "Стенки и карнизы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "tubastraea-spp",
+    "section": "coral",
+    "ru": "Солнечный коралл",
+    "scientific": "Tubastraea spp.",
+    "hook": "Ярко-жёлтые или оранжевые полипы раскрываются преимущественно в темноте.",
+    "where": "Нависания и затенённые уступы",
+    "frequency": "редко",
+    "flag": "ВАУ: В ТЕНИ"
+  },
+  {
+    "id": "dendronephthya-spp",
+    "section": "coral",
+    "ru": "Дендронефтия",
+    "scientific": "Dendronephthya spp.",
+    "hook": "Мягкие розовые и красные ветвистые колонии с полипами-«звёздами».",
+    "where": "Течением омываемые уступы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "tubipora-musica",
+    "section": "coral",
+    "ru": "Органный коралл",
+    "scientific": "Tubipora musica",
+    "hook": "Полипы похожи на мягкую лужайку; внутри красные известковые трубочки.",
+    "where": "Укрытые участки рифа",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "heteroxenia-spp",
+    "section": "coral",
+    "ru": "Гетероксения",
+    "scientific": "Heteroxenia spp.",
+    "hook": "Мягкие пучки из крупных полипов, иногда ритмично сокращающихся.",
+    "where": "Светлые участки склона",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "amphiprion-bicinctus",
+    "section": "fish",
+    "ru": "Двухполосый амфиприон",
+    "scientific": "Amphiprion bicinctus",
+    "hook": "Оранжевый «Немо» с двумя светлыми полосами; живёт внутри актинии.",
+    "where": "Актинии среди рифа",
+    "frequency": "часто",
+    "flag": "ВАУ: СЕМЬЯ"
+  },
+  {
+    "id": "pseudanthias-squamipinnis",
+    "section": "fish",
+    "ru": "Антиас",
+    "scientific": "Pseudanthias squamipinnis",
+    "hook": "Облака небольших оранжевых рыбок; доминирующие самцы розово-фиолетовые.",
+    "where": "У стенок и колонн",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "chromis-viridis",
+    "section": "fish",
+    "ru": "Зелёный хромис",
+    "scientific": "Chromis viridis",
+    "hook": "Стаи нежно-голубых рыбок над ветвистыми кораллами; при опасности прячутся в них.",
+    "where": "Ветвистые колонии",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "dascyllus-aruanus",
+    "section": "fish",
+    "ru": "Дасцилл трёхполосый",
+    "scientific": "Dascyllus aruanus",
+    "hook": "Маленький белый рыбёныш с тремя широкими чёрными полосами.",
+    "where": "Ветвистые кораллы",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "chaetodon-semilarvatus",
+    "section": "fish",
+    "ru": "Бабочка с голубыми щеками",
+    "scientific": "Chaetodon semilarvatus",
+    "hook": "Ярко-жёлтая рыба с заметным голубым пятном у глаз; нередко плавает парой.",
+    "where": "Вдоль склона",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "heniochus-intermedius",
+    "section": "fish",
+    "ru": "Красноморский вымпельник",
+    "scientific": "Heniochus intermedius",
+    "hook": "Чёрно-белые полосы, жёлтый хвост, длинный белый «флажок» спинного плавника.",
+    "where": "Внешняя стенка",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "pomacanthus-imperator",
+    "section": "fish",
+    "ru": "Императорский ангел",
+    "scientific": "Pomacanthus imperator",
+    "hook": "На теле чередуются извилистые синие и жёлтые горизонтальные полосы.",
+    "where": "Уступы, рифовые стенки",
+    "frequency": "иногда",
+    "flag": "ВАУ: ЦВЕТ"
+  },
+  {
+    "id": "pygoplites-diacanthus",
+    "section": "fish",
+    "ru": "Королевский ангел",
+    "scientific": "Pygoplites diacanthus",
+    "hook": "Контрастные оранжево-белые вертикальные полосы с синим кантом.",
+    "where": "Укрытия и стенки",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "acanthurus-sohal",
+    "section": "fish",
+    "ru": "Хирург сохал",
+    "scientific": "Acanthurus sohal",
+    "hook": "Тёмно-синие продольные полосы и оранжевый скальпель у хвоста. Территориален.",
+    "where": "Мелководная кромка",
+    "frequency": "часто",
+    "flag": "ДИСТАНЦИЯ"
+  },
+  {
+    "id": "scarus-spp",
+    "section": "fish",
+    "ru": "Рыба-попугай",
+    "scientific": "Scarus spp.",
+    "hook": "Клюв вместо обычных зубов; часто бирюзовый, розовый или зелёный окрас.",
+    "where": "Плато и склон",
+    "frequency": "часто",
+    "flag": "ВАУ: СЛУШАЙ ХРУСТ"
+  },
+  {
+    "id": "rhinecanthus-assasi",
+    "section": "fish",
+    "ru": "Спинорог Пикассо",
+    "scientific": "Rhinecanthus assasi",
+    "hook": "Геометрический рисунок чёрного, белого и жёлтого; словно нарисован маркером.",
+    "where": "Мелководье и песчаные окна",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "balistapus-undulatus",
+    "section": "fish",
+    "ru": "Оранжевополосый спинорог",
+    "scientific": "Balistapus undulatus",
+    "hook": "Тёмно-зелёное тело с тонкими ярко-оранжевыми диагональными линиями.",
+    "where": "Склон и уступы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "labroides-dimidiatus",
+    "section": "fish",
+    "ru": "Губан-чистильщик",
+    "scientific": "Labroides dimidiatus",
+    "hook": "Стройная рыба с чёрной линией вдоль тела; её «клиенты» замирают на чистке.",
+    "where": "Станции очистки на стенке",
+    "frequency": "часто",
+    "flag": "ВАУ: СИМБИОЗ"
+  },
+  {
+    "id": "cephalopholis-miniata",
+    "section": "fish",
+    "ru": "Групер-коралловик",
+    "scientific": "Cephalopholis miniata",
+    "hook": "Красно-оранжевая рыба, усыпанная мелкими ярко-синими точками.",
+    "where": "Укрытия среди скал",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "pterois-miles",
+    "section": "fish",
+    "ru": "Крылатка",
+    "scientific": "Pterois miles",
+    "hook": "Зебровые полосы и веера длинных плавников; ядовитые шипы.",
+    "where": "В расщелинах, в том числе Temple",
+    "frequency": "часто",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "gymnothorax-javanicus",
+    "section": "fish",
+    "ru": "Гигантская мурена",
+    "scientific": "Gymnothorax javanicus",
+    "hook": "Крупная пятнистая голова из норы; открывает рот для вентиляции жабр.",
+    "where": "Пещерки и навесы",
+    "frequency": "иногда",
+    "flag": "ДИСТАНЦИЯ"
+  },
+  {
+    "id": "cheilinus-undulatus",
+    "section": "fish",
+    "ru": "Рыба-наполеон",
+    "scientific": "Cheilinus undulatus",
+    "hook": "Огромный зелёно-синий губан, у взрослых массивный лоб.",
+    "where": "Ras Um Sid, глубокие края стенки",
+    "frequency": "редко",
+    "flag": "ВАУ: ДЖЕКПОТ"
+  },
+  {
+    "id": "papilloculiceps-longiceps",
+    "section": "fish",
+    "ru": "Рыба-крокодил",
+    "scientific": "Papilloculiceps longiceps",
+    "hook": "Плоская голова, глаза сверху, мраморная маскировка на песке.",
+    "where": "Песок у Ras Katy и Temple",
+    "frequency": "иногда",
+    "flag": "ВАУ: КАМУФЛЯЖ"
+  },
+  {
+    "id": "taeniura-lymma",
+    "section": "fish",
+    "ru": "Синепятнистый хвостокол",
+    "scientific": "Taeniura lymma",
+    "hook": "Небольшой песочный скат с неоновыми голубыми точками.",
+    "where": "Песчаные участки возле колонн",
+    "frequency": "иногда",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "arothron-spp",
+    "section": "fish",
+    "ru": "Рыба-фугу",
+    "scientific": "Arothron spp.",
+    "hook": "Крупная округлая голова, маленькие плавники, характерные точки или пятна.",
+    "where": "Песчаные окна и риф",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "ostracion-cubicus",
+    "section": "fish",
+    "ru": "Жёлтая рыба-коробка",
+    "scientific": "Ostracion cubicus",
+    "hook": "Жёсткое кубическое тело, у молодых жёлтое с чёрными точками.",
+    "where": "Спокойные участки рифа",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "shrimp-associated-gobies",
+    "section": "fish",
+    "ru": "Бычок-сторож",
+    "scientific": "Shrimp-associated gobies",
+    "hook": "Маленькая рыба зависает у норы и предупреждает креветку об опасности.",
+    "where": "Песок между колоннами Ras Katy",
+    "frequency": "иногда",
+    "flag": "ВАУ: ПАРТНЁРСТВО"
+  },
+  {
+    "id": "scorpaenopsis-spp",
+    "section": "fish",
+    "ru": "Рыба-скорпион",
+    "scientific": "Scorpaenopsis spp.",
+    "hook": "Неподвижная «бородавчатая» рыба, сливающаяся с камнем. Ядовитые шипы.",
+    "where": "На камнях, в нишах",
+    "frequency": "иногда",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "sphyraena-barracuda",
+    "section": "fish",
+    "ru": "Большая барракуда",
+    "scientific": "Sphyraena barracuda",
+    "hook": "Длинная серебристая торпеда с мощной челюстью, иногда висит неподвижно.",
+    "where": "В синеве у внешнего свала",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "eretmochelys-imbricata",
+    "section": "fish",
+    "ru": "Бисса, морская черепаха",
+    "scientific": "Eretmochelys imbricata",
+    "hook": "Клювовидный нос, пёстрый панцирь; часто кормится у кораллов.",
+    "where": "У внешней стенки, если повезёт",
+    "frequency": "редко",
+    "flag": "ВАУ: ЧЕРЕПАХА"
+  },
+  {
+    "id": "mobula-birostris",
+    "section": "fish",
+    "ru": "Океаническая манта",
+    "scientific": "Mobula birostris",
+    "hook": "Гигантский «ковёр-самолёт» с головными плавниками; плавает в толще воды. Встреча у Шарма редкая.",
+    "where": "Открытая вода, случайные встречи в районе Шарма",
+    "frequency": "редко",
+    "flag": "ВАУ: МАНТА"
+  },
+  {
+    "id": "mobula-alfredi",
+    "section": "fish",
+    "ru": "Рифовая манта",
+    "scientific": "Mobula alfredi",
+    "hook": "До 4 м в размахе; характерный рисунок на спине. В конкретном районе не гарантирована.",
+    "where": "Редкий гость, не объект прибрежного поиска",
+    "frequency": "редко",
+    "flag": "ВАУ: МАНТА"
+  },
+  {
+    "id": "aetobatus-ocellatus",
+    "section": "fish",
+    "ru": "Пятнистый орляк",
+    "scientific": "Aetobatus ocellatus",
+    "hook": "«Крылья» с белыми пятнами, длинный хвост, вытянутое рыло; летит над дном.",
+    "where": "Песчаные участки и края свала",
+    "frequency": "иногда",
+    "flag": "ТЫ ВИДЕЛ"
+  },
+  {
+    "id": "mobula-spp",
+    "section": "fish",
+    "ru": "Мобула",
+    "scientific": "Mobula spp.",
+    "hook": "Похожа на небольшую манту; часто более узкие плавники и другая форма головы.",
+    "where": "Открытая вода; редкие встречи",
+    "frequency": "редко",
+    "flag": "ВАУ: ПЕЛАГИКА"
+  },
+  {
+    "id": "rhincodon-typus",
+    "section": "fish",
+    "ru": "Китовая акула",
+    "scientific": "Rhincodon typus",
+    "hook": "Огромная фильтрующая акула в белых точках, широкая голова.",
+    "where": "Открытая вода, сезонные редкие встречи",
+    "frequency": "редко",
+    "flag": "ВАУ: ДЖЕКПОТ"
+  },
+  {
+    "id": "triaenodon-obesus",
+    "section": "fish",
+    "ru": "Белопёрая рифовая акула",
+    "scientific": "Triaenodon obesus",
+    "hook": "Стройная серая акула с белыми кончиками первого спинного и хвостового плавников.",
+    "where": "Пещеры и глубокие участки рифа",
+    "frequency": "редко",
+    "flag": ""
+  },
+  {
+    "id": "naso-unicornis",
+    "section": "fish",
+    "ru": "Синеплавничный носорог",
+    "scientific": "Naso unicornis",
+    "hook": "Крупная рыба-хирург, у взрослых выступает рог, хвост часто с нитями.",
+    "where": "Внешние склоны",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "zebrasoma-xanthurum",
+    "section": "fish",
+    "ru": "Жёлтохвостый хирург",
+    "scientific": "Zebrasoma xanthurum",
+    "hook": "Темно-сине-фиолетовое тело и контрастный жёлтый хвост.",
+    "where": "Плато и верхний склон",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "fistularia-commersonii",
+    "section": "fish",
+    "ru": "Рыба-флейта",
+    "scientific": "Fistularia commersonii",
+    "hook": "Очень длинное тонкое тело и трубчатое рыло; часто висит над кораллами.",
+    "where": "У кромки и вдоль стенки",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "aulostomus-chinensis",
+    "section": "fish",
+    "ru": "Рыба-труба",
+    "scientific": "Aulostomus chinensis",
+    "hook": "Длинная прямая рыбка с тонким рылом, иногда вертикально висит среди горгонарий.",
+    "where": "Вертикальные стенки и карнизы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "chaetodon-fasciatus",
+    "section": "fish",
+    "ru": "Полосатая рыба-бабочка",
+    "scientific": "Chaetodon fasciatus",
+    "hook": "Жёлтая рыба с чёрными диагональными полосами и тёмной полосой через глаз.",
+    "where": "Склон и мелководье",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "coris-aygula",
+    "section": "fish",
+    "ru": "Коронованный губан",
+    "scientific": "Coris aygula",
+    "hook": "Крупный губан, окраска заметно меняется с возрастом.",
+    "where": "Песчаные окна и края рифа",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "sargocentron-spiniferum",
+    "section": "fish",
+    "ru": "Солдат-рыба",
+    "scientific": "Sargocentron spiniferum",
+    "hook": "Красный крупноглазый ночной житель; прячется днём в щелях.",
+    "where": "Пещерки, навесы",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "canthigaster-margaritata",
+    "section": "fish",
+    "ru": "Острохвостый иглобрюх",
+    "scientific": "Canthigaster margaritata",
+    "hook": "Маленький иглобрюх с белыми точками; нос заострён.",
+    "where": "Мелководье и рифовые ниши",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "synanceia-verrucosa",
+    "section": "fish",
+    "ru": "Рыба-камень",
+    "scientific": "Synanceia verrucosa",
+    "hook": "Похожая на комок камней рыба с опасными ядовитыми шипами.",
+    "where": "На дне и среди камней",
+    "frequency": "редко",
+    "flag": "ОПАСНО"
+  },
+  {
+    "id": "ostracion-meleagris",
+    "section": "fish",
+    "ru": "Буропятнистый кузовок",
+    "scientific": "Ostracion meleagris",
+    "hook": "Почти коробчатое тело; у самок тёмное с белыми точками.",
+    "where": "Укрытые участки рифа",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "pterois-radiata",
+    "section": "fish",
+    "ru": "Крылатка-радиата",
+    "scientific": "Pterois radiata",
+    "hook": "Полосатая крылатка с длинными свободными лучами плавников.",
+    "where": "Тенистые щели и уступы",
+    "frequency": "иногда",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "tridacna-maxima",
+    "section": "mollusc",
+    "ru": "Тридакна",
+    "scientific": "Tridacna maxima",
+    "hook": "Волнистая мантия бывает электрически-синей, зелёной, золотой; сидит в камне.",
+    "where": "Мелководье, рифовые щели",
+    "frequency": "часто",
+    "flag": "ВАУ: НЕОНОВАЯ"
+  },
+  {
+    "id": "octopus-cyanea",
+    "section": "mollusc",
+    "ru": "Большой дневной осьминог",
+    "scientific": "Octopus cyanea",
+    "hook": "Восемь рук, мгновенная смена цвета и рельефа кожи; прячется в норах.",
+    "where": "Ниши и камни, особенно спокойные часы",
+    "frequency": "иногда",
+    "flag": "ВАУ: МАГИЯ"
+  },
+  {
+    "id": "sepia-pharaonis",
+    "section": "mollusc",
+    "ru": "Каракатица фараона",
+    "scientific": "Sepia pharaonis",
+    "hook": "Широкое овальное тело с волнистым боковым плавником и меняющимся рисунком.",
+    "where": "Песчаные участки, у рифа",
+    "frequency": "редко",
+    "flag": "ВАУ: МИМИКРИЯ"
+  },
+  {
+    "id": "chromodoris-quadricolor",
+    "section": "mollusc",
+    "ru": "Четырёхцветный хромодорис",
+    "scientific": "Chromodoris quadricolor",
+    "hook": "Небольшой голожаберник с яркими сине-чёрными полосами и жёлтой каймой.",
+    "where": "На губках и камнях",
+    "frequency": "иногда",
+    "flag": "ВАУ: ДРАГОЦЕННОСТЬ"
+  },
+  {
+    "id": "phyllidia-varicosa",
+    "section": "mollusc",
+    "ru": "Филлидия",
+    "scientific": "Phyllidia varicosa",
+    "hook": "Плотный слизень с выпуклыми бугорками; голубой, чёрный и жёлтый рисунок.",
+    "where": "На губках и камнях",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "hexabranchus-sanguineus",
+    "section": "mollusc",
+    "ru": "Испанский танцор",
+    "scientific": "Hexabranchus sanguineus",
+    "hook": "Большой красный голожаберник; при плавании раскрывает волнистые края тела.",
+    "where": "Чаще ночью, в расщелинах",
+    "frequency": "редко",
+    "flag": "ВАУ: НОЧНОЙ ТАНЕЦ"
+  },
+  {
+    "id": "mauritia-tigris",
+    "section": "mollusc",
+    "ru": "Мраморная каури",
+    "scientific": "Mauritia tigris",
+    "hook": "Гладкая блестящая раковина с пятнами; живой моллюск может накрывать её мантией.",
+    "where": "Под камнями и в нишах",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "conus-textile",
+    "section": "mollusc",
+    "ru": "Конус текстильный",
+    "scientific": "Conus textile",
+    "hook": "Коническая раковина с геометрическим узором. Живого конуса никогда не бери!",
+    "where": "Песок и укрытия",
+    "frequency": "редко",
+    "flag": "ОПАСНО"
+  },
+  {
+    "id": "pinctada-margaritifera",
+    "section": "mollusc",
+    "ru": "Жемчужница",
+    "scientific": "Pinctada margaritifera",
+    "hook": "Прикреплённая к камню тёмная двустворчатая раковина, не похожая на тридакну.",
+    "where": "Твёрдые поверхности",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "sepioteuthis-lessoniana",
+    "section": "mollusc",
+    "ru": "Кальмар рифовый",
+    "scientific": "Sepioteuthis lessoniana",
+    "hook": "Вытянутое тело с боковыми плавниками; иногда держится небольшой группой.",
+    "where": "Над рифом и у обрывов",
+    "frequency": "иногда",
+    "flag": "ВАУ: ПЕРЕЛИВЫ"
+  },
+  {
+    "id": "tridacna-squamosa",
+    "section": "mollusc",
+    "ru": "Тридакна чешуйчатая",
+    "scientific": "Tridacna squamosa",
+    "hook": "Раковина с выраженными крупными чешуйками; мантия бывает бурой или яркой.",
+    "where": "Твёрдое дно и рифовые карманы",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "tridacna-squamosina",
+    "section": "mollusc",
+    "ru": "Тридакна красноморская",
+    "scientific": "Tridacna squamosina",
+    "hook": "Редкий красноморский вид; без детальных фото трудно отличить от других тридакн.",
+    "where": "Рифы Красного моря, встреча редкая",
+    "frequency": "редко",
+    "flag": "ВАУ: ЭНДЕМИК"
+  },
+  {
+    "id": "coryphellina-rubrolineata",
+    "section": "mollusc",
+    "ru": "Голожаберник-флабеллина",
+    "scientific": "Coryphellina rubrolineata",
+    "hook": "Полупрозрачное тело с яркими красноватыми отростками и линиями.",
+    "where": "Среди гидроидов на стенках",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "phyllidiopsis-spp",
+    "section": "mollusc",
+    "ru": "Голубая филлидиопсис",
+    "scientific": "Phyllidiopsis spp.",
+    "hook": "Плотные голубовато-серые бугорчатые голожаберники с тёмными линиями.",
+    "where": "Камни и губки",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "hypselodoris-infucata",
+    "section": "mollusc",
+    "ru": "Хипселодорис",
+    "scientific": "Hypselodoris infucata",
+    "hook": "Светлый голожаберник с жёлтыми и синими пятнами.",
+    "where": "Среди губок",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "conus-spp",
+    "section": "mollusc",
+    "ru": "Малый конус",
+    "scientific": "Conus spp.",
+    "hook": "Многие конусы внешне эффектны и потенциально опасны; живых не подбирать.",
+    "where": "Песок, щели, ночные часы",
+    "frequency": "иногда",
+    "flag": "НЕ ТРОГАТЬ"
+  },
+  {
+    "id": "aplysia-spp",
+    "section": "mollusc",
+    "ru": "Морской заяц",
+    "scientific": "Aplysia spp.",
+    "hook": "Мягкое бурое тело с двумя складками-параподиями; иногда выползает на песок.",
+    "where": "Водорослевые участки и лагуны",
+    "frequency": "редко",
+    "flag": ""
+  },
+  {
+    "id": "alpheus-spp",
+    "section": "crust",
+    "ru": "Креветка-пистолет",
+    "scientific": "Alpheus spp.",
+    "hook": "Одна клешня крупнее другой; живёт в норе с бычком и щёлкает клешнёй.",
+    "where": "Песчаные окна Ras Katy",
+    "frequency": "иногда",
+    "flag": "ВАУ: СИМБИОЗ"
+  },
+  {
+    "id": "lysmata-amboinensis",
+    "section": "crust",
+    "ru": "Креветка-чистильщик",
+    "scientific": "Lysmata amboinensis",
+    "hook": "Красная спина с белой линией и длинные белые усики; чистит рыб.",
+    "where": "Под карнизами, станции очистки",
+    "frequency": "иногда",
+    "flag": "ВАУ: ЧИСТКА"
+  },
+  {
+    "id": "stenopus-hispidus",
+    "section": "crust",
+    "ru": "Полосатый стенопус",
+    "scientific": "Stenopus hispidus",
+    "hook": "Красно-белые кольца и непропорционально длинные белые усики.",
+    "where": "Тенистые щели",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "thor-amboinensis",
+    "section": "crust",
+    "ru": "Креветка-анемонная",
+    "scientific": "Thor amboinensis",
+    "hook": "Очень маленькая, с крупными белыми пятнами; держит брюшко поднятым.",
+    "where": "Актинии",
+    "frequency": "иногда",
+    "flag": "ВАУ: ТАНЦУЕТ"
+  },
+  {
+    "id": "panulirus-versicolor",
+    "section": "crust",
+    "ru": "Лангуст расписной",
+    "scientific": "Panulirus versicolor",
+    "hook": "Большие усики, яркий контрастный панцирь, нет крупных клешней.",
+    "where": "Ниши и пещеры, чаще ночью",
+    "frequency": "редко",
+    "flag": "ВАУ: НОЧНАЯ ВСТРЕЧА"
+  },
+  {
+    "id": "trapezia-spp",
+    "section": "crust",
+    "ru": "Краб-охранник коралла",
+    "scientific": "Trapezia spp.",
+    "hook": "Небольшой краб живёт внутри ветвистого коралла и защищает хозяина.",
+    "where": "Ветви поциллопор",
+    "frequency": "иногда",
+    "flag": "ВАУ: ТЕЛОХРАНИТЕЛЬ"
+  },
+  {
+    "id": "dardanus-spp",
+    "section": "crust",
+    "ru": "Рак-отшельник",
+    "scientific": "Dardanus spp.",
+    "hook": "Рак с мягким брюшком в чужой раковине улитки; бывает с актиниями.",
+    "where": "Каменистое дно",
+    "frequency": "часто",
+    "flag": ""
+  },
+  {
+    "id": "lybia-spp",
+    "section": "crust",
+    "ru": "Краб-боксёр",
+    "scientific": "Lybia spp.",
+    "hook": "Крошечный краб держит в каждой клешне мини-актинию, как помпон.",
+    "where": "Щели, сложен для поиска",
+    "frequency": "редко",
+    "flag": "ВАУ: СУПЕРРЕДКО"
+  },
+  {
+    "id": "saron-marmoratus",
+    "section": "crust",
+    "ru": "Креветка Сарон",
+    "scientific": "Saron marmoratus",
+    "hook": "Мраморная окраска, заметные глаза и пучки щетинок; активнее ночью.",
+    "where": "Небольшие ниши рифа",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "hymenocera-picta",
+    "section": "crust",
+    "ru": "Креветка-арлекин",
+    "scientific": "Hymenocera picta",
+    "hook": "Крошечная яркая креветка с крупными сине-фиолетовыми пятнами; ест морских звёзд.",
+    "where": "Щели и нижние поверхности камней",
+    "frequency": "редко",
+    "flag": "ВАУ: ЮВЕЛИРКА"
+  },
+  {
+    "id": "portunidae-spp",
+    "section": "crust",
+    "ru": "Краб-плавунец",
+    "scientific": "Portunidae spp.",
+    "hook": "Пятая пара ног расширена в лопатки; может быстро плавать над песком.",
+    "where": "Песчаные окна",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "neopetrolisthes-maculatus",
+    "section": "crust",
+    "ru": "Краб фарфоровый",
+    "scientific": "Neopetrolisthes maculatus",
+    "hook": "Небольшой плоский краб с пятнами и большими клешнями у актиний.",
+    "where": "Актинии и укрытия",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "carpilius-convexus",
+    "section": "crust",
+    "ru": "Рифовый краб",
+    "scientific": "Carpilius convexus",
+    "hook": "Массивный пятнистый краб с мощными клешнями, активен в сумерках.",
+    "where": "Под камнями и в укрытиях",
+    "frequency": "редко",
+    "flag": ""
+  },
+  {
+    "id": "urocaridella-spp",
+    "section": "crust",
+    "ru": "Креветка стеклянная",
+    "scientific": "Urocaridella spp.",
+    "hook": "Почти прозрачная длинная креветка с белыми и красными метками.",
+    "where": "Щели, станции очистки",
+    "frequency": "иногда",
+    "flag": ""
+  },
+  {
+    "id": "eriphia-sebana",
+    "section": "crust",
+    "ru": "Краб-эрфия",
+    "scientific": "Eriphia sebana",
+    "hook": "Крепкий тёмный краб с широкими клешнями; чаще на каменистом мелководье.",
+    "where": "Камни у берега",
+    "frequency": "иногда",
+    "flag": ""
+  }
+]

@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+assets/*.jpg
+assets/*.jpeg
+assets/*.png
+output/*.pdf
+output/*.csv
+data/manifest.json
