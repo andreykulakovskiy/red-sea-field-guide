@@ -1,0 +1,77 @@
+name: Publish offline guide to GitHub Releases
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-release.yml'
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Successful Build offline Red Sea photo guide workflow run ID'
+        type: string
+        required: true
+        default: '43364354562'
+      tag:
+        description: 'New release tag (e.g. v0.2.0)'
+        type: string
+        required: true
+        default: 'v0.1.0'
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download verified successful artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: red-sea-offline-photo-guide
+          repository: andreykulakovskiy/red-sea-field-guide
+          run-id: ${{ inputs.run_id || '43364354562' }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: release
+      - name: Validate files before release
+        run: |
+          test -s release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf
+          test -s release/PHOTO_CREDITS.csv
+          test -f release/MISSING_PHOTOS.txt
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf')
+          assert p.read_bytes()[:5] == b'%PDF-'
+          print(f'Validated PDF ({p.stat().st_size / 1024**2:.1f} MiB) and photo credits')
+          PY
+      - name: Publish permanent release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || 'v0.1.0' }}
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite it"
+            exit 1
+          fi
+          cat > /tmp/release-notes.md <<'EOF'
+          Русскоязычный офлайн-определитель кораллов, рыб, моллюсков и ракообразных для Faraana Reef, Temple и Ras Katy (Шарм-эль-Шейх).
+
+          - 98 видов и групп, 66 страниц.
+          - 190 реальных фотографий из Wikimedia Commons прямо внутри PDF.
+          - Для 95 из 98 позиций найдены фотографии; список остальных приложен.
+          - Полная информация об авторах и условиях использования снимков — в PDF и PHOTO_CREDITS.csv.
+          - PDF работает без интернета, в том числе на телефоне.
+
+          Важно: это любительский практический определитель, а не научная инвентаризация или гарантия встречи видов. Для родов могут быть показаны представители рода. Идентификация некоторых организмов по фото бывает неоднозначной.
+
+          Исходники и инструкции по сборке: https://github.com/andreykulakovskiy/red-sea-field-guide
+          EOF
+          gh release create "$RELEASE_TAG" \
+            release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf \
+            release/PHOTO_CREDITS.csv \
+            release/MISSING_PHOTOS.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Красное море — офлайн-определитель $RELEASE_TAG" \
+            --notes-file /tmp/release-notes.md
