@@ -26,6 +26,10 @@ def bad_metadata(filename, description):
     if any(token in text for token in (
              'aqua park','aquapark','aquatic park','aqua world',
              'conchologia iconica','illustrations of the shells',
+             'grave of ','graveyard','headstone','cemetery',
+             'conus collecting','species collecting','collector label',
+             'journal figure',' figure ','figure 1','figure 2','figure 3',
+             'figure 4','figure 5','figure 6','plate from',
              'aquarium park','oceanarium','oceanic aquarium','ocean park',
              'sealife centre','sea life centre','aquarium exhibit',
              'naturalis','mnhn','rmnh','smithsonian',
