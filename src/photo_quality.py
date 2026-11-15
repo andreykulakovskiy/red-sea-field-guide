@@ -55,6 +55,13 @@ def photo_score(im,section,info_text=''):
     if m['black']>0.82 and m['blue']<0.06: return -100.0,m
     if m['saturation']<0.075 and m['blue']<0.09: return -100.0,m
     if min(im.size)<300: return -100.0,m
+    # Mantas and eagle rays must be photographed underwater, not preserved in
+    # museums, on laboratory tables, or laid out on contrasting backgrounds.
+    taxon=info_text.casefold()
+    if any(word in taxon for word in ('mobula','aetobatus','manta','eagle ray')):
+        if m['blue']<0.12: return -100.0,m
+    if 'sepia' in taxon and m['paper']>0.08 and m['blue']<0.08:
+        return -100.0,m
     score=17.0+min(37.0,m['saturation']*80)
     score+=min(20.0,m['blue']*46)+min(12.0,m['contrast']*.17)
     score+=min(8.0,m['edges']*.35)-m['paper']*65-m['gray']*16
