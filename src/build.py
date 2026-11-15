@@ -324,7 +324,7 @@ def credits_csv(manifest):
 
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument('--photos',type=int,choices=[1,2],default=2,help='Photos per species (default 2).')
+    ap.add_argument('--photos',type=int,choices=[1,2,3],default=3,help='Photos per species (default 3).')
     ap.add_argument('--offline',action='store_true',help='Do not access Wikimedia; build with cached photos only.')
     ap.add_argument('--limit',type=int,default=0,help='For testing with only first N entries')
     args=ap.parse_args()
