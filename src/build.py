@@ -103,6 +103,12 @@ def find_images(species, per_species, curated):
         if name not in fixed:
             if generic:
                 if normalize(search) not in n and normalize(search) not in d: continue
+                # 'Xenia' is also a building/person/place name. Require a real
+                # marine context or recognizable coral taxonomic qualifier.
+                if normalize(search)=='xenia' and not any(word in n+' '+d for word in
+                    ('coral','reef','underwater','marine','ocean','polyp',
+                     'xenia sp','xenia umbellata','xeniidae')):
+                    continue
             elif exact not in n and not (first in n and exact in d):
                 continue
         score=0.0
@@ -120,7 +126,7 @@ def find_images(species, per_species, curated):
             'attribution':clean_html(meta.get('Attribution',{}).get('value','')),
             'species_id':key,'scientific':scientific,'section':species['section'],
             'prior_score':round(score,1),
-            'transformations':'Resized to max 1360 px; original aspect ratio preserved.'}))
+            'transformations':'Resized to max 1200 px; original aspect ratio preserved.'}))
     candidates.sort(key=lambda x:-x[0])
     return key,[row for _,row in candidates[:max(8,per_species*3)]]
 
@@ -165,8 +171,8 @@ def fetch_photos(species,per_species):
             if len(accepted)>=per_species:break
         for j,(score,meta,im,metrics,hashv) in enumerate(accepted):
             path=ASSET/'v2'/(safe_id(sp['id'])+'-'+str(j+1)+'.jpg')
-            im.thumbnail((1360,1360))
-            im.save(path,'JPEG',quality=88,optimize=True)
+            im.thumbnail((1200,1200))
+            im.save(path,'JPEG',quality=83,optimize=True)
             meta['local_path']=str(path.relative_to(ROOT))
             meta['quality_score']=round(score,1)
             meta['quality_metrics']=metrics
