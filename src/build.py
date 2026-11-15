@@ -6,6 +6,8 @@ import argparse, concurrent.futures, html, json, os, re, sys, time, unicodedata
 from pathlib import Path
 from urllib.parse import quote
 import requests
+from io import BytesIO
+from photo_quality import bad_metadata, metadata_bonus, photo_score, ahash, similar
 from PIL import Image, ImageOps
 from reportlab.pdfgen import canvas
 from reportlab.lib.colors import HexColor
@@ -16,7 +18,7 @@ from reportlab.lib.utils import ImageReader, simpleSplit
 ROOT=Path(__file__).resolve().parents[1]
 DATA=ROOT/'data'; ASSET=ROOT/'assets'; OUT=ROOT/'output'
 API='https://commons.wikimedia.org/w/api.php'
-UA='OpenRedSeaFieldGuide/1.0 (educational, attribution-preserving image reuse; contact: https://github.com/)'
+UA='OpenRedSeaFieldGuide/2.0 (open photo guide; https://github.com/andreykulakovskiy/red-sea-field-guide)'
 ALLOW=['CC BY-SA','CC BY ','CC0','PUBLIC DOMAIN','PDM','PD-']
 FONT_DIRS=['/usr/share/fonts/truetype/dejavu','/usr/share/fonts/truetype/noto','/Library/Fonts','C:/Windows/Fonts']
 C_NAVY='#082C3A'; C_TEAL='#017D83'; C_INK='#1C3740'; C_MUTED='#49666D'; C_BG='#F0F7F7'
@@ -65,100 +67,123 @@ def acceptable_license(meta):
 
 
 def find_images(species, per_species, curated):
-    scientific=species['scientific']
-    key=species['id']
-    fixed=curated.get(key,[])
+    """Return licensed, correctly identified Wikimedia candidates; inspect pixels next."""
+    scientific=species['scientific']; key=species['id']; fixed=curated.get(key,[])
+    generic=any(k in scientific for k in ('spp.','sp.',' / ','Gorgonacea'))
     search=scientific.split(' spp.')[0].split(' sp.')[0].split(' / ')[0]
-    if ' ' in scientific and not any(x in scientific for x in ('spp.','sp.','/')):
-        term='"'+scientific+'"'
-    else: term=search
+    term=search if generic else '"'+scientific+'"'
     params={'action':'query','format':'json','formatversion':'2','generator':'search',
-        'gsrnamespace':'6','gsrsearch':term,'gsrlimit':'30',
-        'prop':'imageinfo','iiprop':'url|size|mime|extmetadata','iiurlwidth':'940'}
+            'gsrnamespace':'6','gsrsearch':term,'gsrlimit':'50',
+            'prop':'imageinfo','iiprop':'url|size|mime|extmetadata','iiurlwidth':'1100'}
     pages=[]
     if fixed:
-        pinned={'action':'query','format':'json','formatversion':'2','titles':'|'.join('File:'+f for f in fixed),
-        'prop':'imageinfo','iiprop':'url|size|mime|extmetadata','iiurlwidth':'940'}
+        pinned={'action':'query','format':'json','formatversion':'2',
+                'titles':'|'.join('File:'+f for f in fixed),
+                'prop':'imageinfo','iiprop':'url|size|mime|extmetadata','iiurlwidth':'1100'}
         try: pages.extend(get_json(pinned).get('query',{}).get('pages',[]))
-        except Exception as ex: print('Curated query error',scientific,str(ex),file=sys.stderr)
+        except Exception as ex: print('Curated query error:',scientific,str(ex),file=sys.stderr)
     try: pages.extend(get_json(params).get('query',{}).get('pages',[]))
-    except Exception as ex: print('Search query error',scientific,str(ex),file=sys.stderr)
-    candidates=[]
-    for p in pages:
-        img=(p.get('imageinfo') or [None])[0]
-        if not img or not (img.get('thumburl') or img.get('url')): continue
-        if img.get('mime') not in ('image/jpeg','image/png','image/webp'): continue
+    except Exception as ex: print('Search query error:',scientific,str(ex),file=sys.stderr)
+    candidates=[];seen=set()
+    first=scientific.split()[0].casefold(); exact=scientific.casefold()
+    for page in pages:
+        img=(page.get('imageinfo') or [None])[0]
+        if not img or img.get('mime') not in ('image/jpeg','image/png','image/webp'): continue
+        if min(img.get('width',0),img.get('height',0))<300: continue
         meta=img.get('extmetadata') or {}
         lic=acceptable_license(meta)
         if not lic: continue
-        name=p.get('title','')[5:]
-        n=normalize(name)
-        if re.search(r'(drawing|illustration|diagram|lineart|clipart|artwork|map|sketch|logo|vector)',n): continue
-        if ' '.join(scientific.split()[:2]).casefold() not in n and 'spp.' not in scientific and 'sp.' not in scientific and '/' not in scientific:
-            # only accept accurately named species photos (not lookalikes)
-            continue
-        if ('spp.' in scientific or 'sp.' in scientific) and normalize(search) not in n: continue
-        score=0
-        if normalize(scientific) in n: score+=60
-        if normalize(search) in n: score+=20
-        if any(t in n for t in ('red sea','mar rojo','ras katy','sharm','egypt','egipto','ras muhammad')): score+=15
-        if name in fixed: score+=1000
-        score+=min(img.get('width',0),2400)/600
-        candidates.append((score,name,img,meta,lic))
-    candidates.sort(key=lambda x:-x[0]); selected=[]; seen=set()
-    for score,name,img,meta,lic in candidates:
-        if name in seen: continue
+        name=page.get('title','').removeprefix('File:')
+        if not name or name in seen: continue
         seen.add(name)
-        selected.append({'filename':name,'source_page':'https://commons.wikimedia.org/wiki/File:'+quote(name.replace(' ','_')),
+        desc=clean_html(meta.get('ImageDescription',{}).get('value',''))+' '+clean_html(meta.get('ObjectName',{}).get('value',''))
+        if bad_metadata(name,desc): continue
+        n=normalize(name);d=normalize(desc)
+        # A mere mention in unrelated description must not misidentify the subject.
+        if name not in fixed:
+            if generic:
+                if normalize(search) not in n and normalize(search) not in d: continue
+            elif exact not in n and not (first in n and exact in d):
+                continue
+        score=0.0
+        if exact in n: score+=50
+        elif normalize(search) in n: score+=24
+        if name in fixed: score+=75
+        score+=metadata_bonus(n+' '+d)
+        score+=min(img.get('width',0),3000)/300
+        score+=min(img.get('height',0),2500)/650
+        candidates.append((score,{'filename':name,
+            'source_page':'https://commons.wikimedia.org/wiki/File:'+quote(name.replace(' ','_')),
             'remote_url':img.get('thumburl') or img.get('url'),
             'author':clean_html(meta.get('Artist',{}).get('value','')) or 'See source file',
-            'license':lic,
-            'license_url':clean_html(meta.get('LicenseUrl',{}).get('value','')),
+            'license':lic,'license_url':clean_html(meta.get('LicenseUrl',{}).get('value','')),
             'attribution':clean_html(meta.get('Attribution',{}).get('value','')),
-            'species_id':key,'scientific':scientific,
-            'transformations':'Resized to max 1100 px; original aspect preserved.'})
-        if len(selected)>=per_species: break
-    return key,selected
+            'species_id':key,'scientific':scientific,'section':species['section'],
+            'prior_score':round(score,1),
+            'transformations':'Resized to max 1360 px; original aspect ratio preserved.'}))
+    candidates.sort(key=lambda x:-x[0])
+    return key,[row for _,row in candidates[:max(8,per_species*3)]]
+
+
+def download_one(candidate):
+    """Fetch pixels before acceptance. Never reuse v0.1's stale image cache."""
+    resp=requests.get(candidate['remote_url'],headers={'User-Agent':UA},timeout=60)
+    resp.raise_for_status()
+    if len(resp.content)>20*1024*1024: raise ValueError('Image too large')
+    im=Image.open(BytesIO(resp.content)).convert('RGB')
+    score,metrics=photo_score(im,candidate['section'],candidate['filename'])
+    return score,candidate,im,metrics,ahash(im)
+
+
+def fetch_photos(species,per_species):
+    ASSET.mkdir(exist_ok=True);(ASSET/'v2').mkdir(exist_ok=True);OUT.mkdir(exist_ok=True)
+    curated=json.loads((DATA/'curated.json').read_text('utf-8'))
+    photos={};errors=[]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+        futures=[pool.submit(find_images,item,per_species,curated) for item in species]
+        for fut in concurrent.futures.as_completed(futures):
+            try: k,files=fut.result();photos[k]=files
+            except Exception as e:errors.append(str(e))
+    attached={s['id']:[] for s in species};qa=[]
+    # Requests stay sequential to avoid hammering Commons thumbnail servers.
+    for idx,sp in enumerate(species):
+        choices=[]
+        for p in photos.get(sp['id'],[]):
+            try:
+                score,meta,im,metrics,hashv=download_one(p)
+                qa.append({'species':sp['scientific'],'filename':p['filename'],
+                    'score':score,'status':'candidate' if score>=35 else 'rejected_low_quality',
+                    **metrics})
+                if score>=35:
+                    choices.append((score+p['prior_score']*0.18,meta,im,metrics,hashv))
+            except Exception as e:
+                print('Photo skipped:',sp['scientific'],p['filename'],str(e)[:100],file=sys.stderr)
+        choices.sort(key=lambda row:-row[0]);accepted=[]
+        for score,meta,im,metrics,hashv in choices:
+            if any(similar(hashv,other[4]) for other in accepted):continue
+            accepted.append((score,meta,im,metrics,hashv))
+            if len(accepted)>=per_species:break
+        for j,(score,meta,im,metrics,hashv) in enumerate(accepted):
+            path=ASSET/'v2'/(safe_id(sp['id'])+'-'+str(j+1)+'.jpg')
+            im.thumbnail((1360,1360))
+            im.save(path,'JPEG',quality=88,optimize=True)
+            meta['local_path']=str(path.relative_to(ROOT))
+            meta['quality_score']=round(score,1)
+            meta['quality_metrics']=metrics
+            attached[sp['id']].append(meta)
+        print(f'[{idx+1}/{len(species)}] {sp["scientific"]}: {len(attached[sp["id"]])} verified natural photos',flush=True)
+    (DATA/'manifest.json').write_text(json.dumps(attached,ensure_ascii=False,indent=2),encoding='utf-8')
+    import csv
+    with open(OUT/'PHOTO_QA.csv','w',encoding='utf-8-sig',newline='') as f:
+        cols=['species','filename','status','score','saturation','blue','paper','black','gray','contrast','edges','width','height']
+        wr=csv.DictWriter(f,fieldnames=cols);wr.writeheader()
+        for row in qa:wr.writerow({col:row.get(col,'') for col in cols})
+    print('Downloaded and selected images:',sum(map(len,attached.values())),'of',len(species),'entries;',len(errors),'search errors')
+    return attached
 
 
 def safe_id(s):
     return re.sub(r'[^a-z0-9-]+','-',s.lower()).strip('-')
-
-
-def download_one(photo,seq):
-    key=photo['species_id']; target=ASSET/(safe_id(key)+'-'+str(seq+1)+'.jpg')
-    photo['local_path']=str(target.relative_to(ROOT))
-    if target.exists() and target.stat().st_size>1000: return photo
-    resp=requests.get(photo['remote_url'],headers={'User-Agent':UA},timeout=55)
-    resp.raise_for_status()
-    if len(resp.content)>18*1024*1024: raise ValueError('Image too large')
-    from io import BytesIO
-    im=Image.open(BytesIO(resp.content)).convert('RGB')
-    im.thumbnail((1100,1100))
-    im.save(target,'JPEG',quality=82,optimize=True)
-    return photo
-
-
-def fetch_photos(species,per_species):
-    ASSET.mkdir(exist_ok=True);OUT.mkdir(exist_ok=True)
-    curated=json.loads((DATA/'curated.json').read_text('utf-8'))
-    photos={}; errors=[]
-    # A gentle 3-worker limit to avoid hammering the Commons API.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
-        future=[pool.submit(find_images,item,per_species,curated) for item in species]
-        for fut in concurrent.futures.as_completed(future):
-            try: k,files=fut.result();photos[k]=files
-            except Exception as e:errors.append(str(e))
-    downloads=[]
-    for sp in species:
-        for i,p in enumerate(photos.get(sp['id'],[])):
-            try: downloads.append(download_one(p,i))
-            except Exception as e: print('Download skipped',sp['scientific'],str(e),file=sys.stderr)
-    attached={k:[] for k in (s['id'] for s in species)}
-    for p in downloads: attached[p['species_id']].append(p)
-    (DATA/'manifest.json').write_text(json.dumps(attached,ensure_ascii=False,indent=2),encoding='utf-8')
-    print('Downloaded images:',len(downloads),'of',len(species),'entries;',len(errors),'search errors')
-    return attached
 
 
 def text(c,x,y,s,size=10,font='Body',color=C_INK):
@@ -181,23 +206,39 @@ def image_fit(c,path,x,y,w,h):
 def build_pdf(species,manifest,dest):
     register_fonts();W,H=595,842
     c=canvas.Canvas(str(dest),pagesize=(W,H),pageCompression=1)
-    c.setTitle('Красное море: офлайн-определитель Faraana, Temple, Ras Katy')
+    c.setTitle('Красное море: яркий офлайн-определитель v0.2, Faraana, Temple, Ras Katy')
     c.setAuthor('Open Red Sea Field Guide contributors')
     def page_header(title,page):
         c.setFillColor(HexColor(C_NAVY));c.rect(0,H-82,W,82,fill=1,stroke=0)
         text(c,28,H-36,title,19,'Bold','#FFFFFF')
         text(c,28,H-57,'Faraana Reef   •   Temple   •   Ras Katy',9,'Body','#AEE6E5')
         c.setStrokeColor(HexColor('#D5E5E8'));c.line(24,36,W-24,36)
-        text(c,25,22,'Красное море   |   реальные фото Wikimedia Commons',8,'Body',C_MUTED)
+        text(c,25,22,'КРАСНОЕ МОРЕ  •  UNDERWATER FIELD GUIDE  •  CC-licensed photography',8,'Body',C_MUTED)
         text(c,W-45,22,str(page),8,'Bold',C_TEAL)
     page=1
     c.setFillColor(HexColor(C_NAVY));c.rect(0,0,W,H,fill=1,stroke=0)
-    text(c,42,728,'КРАСНОЕ МОРЕ',37,'Bold','#FFFFFF')
-    text(c,43,684,'Полевой определитель рифовой жизни',16,'Body','#BCF0EC')
-    text(c,43,645,'Faraana • Temple • Ras Katy • Рас-Ум-Сид',12,'Body','#FFFFFF')
-    text(c,44,528,f'{len(species)} видов и групп • офлайн-фотографии • свободные лицензии',12,'Body','#FFFFFF')
-    wrapped(c,'Фотографии вставлены непосредственно в PDF. Интернет не нужен. Авторы и лицензии перечислены в конце; полная информация приложена в файле PHOTO_CREDITS.csv.',44,455,510,11,18,6,'#D7F1F0')
-    wrapped(c,'Материал предназначен для наблюдений, не для точной идентификации сложных видов без проверки специалистом.',44,342,500,10,17,4,'#D7F1F0')
+    # Real Wikimedia photography, never AI-generated; favor brightly colored fish.
+    options=[]
+    for item in species:
+        if item['section'] not in ('fish','coral'):continue
+        for ph in manifest.get(item['id'],[]):
+            path=ROOT/ph.get('local_path','')
+            if path.exists():
+                priority=12 if item['id'] in ('pomacanthus-imperator','pygoplites-diacanthus','aetobatus-ocellatus') else 0
+                options.append((ph.get('quality_score',0)+priority,path,ph))
+    options.sort(key=lambda a:-a[0])
+    if options:
+        with Image.open(options[0][1]) as im:
+            cover=ImageOps.fit(im.convert('RGB'),(1100,850),method=Image.Resampling.LANCZOS)
+            c.drawImage(ImageReader(cover),0,250,width=W,height=450)
+    c.setFillColor(HexColor(C_NAVY));c.rect(0,700,W,142,fill=1,stroke=0)
+    c.setFillColor(HexColor(C_NAVY));c.rect(0,0,W,250,fill=1,stroke=0)
+    text(c,42,754,'КРАСНОЕ МОРЕ',35,'Bold','#FFFFFF')
+    text(c,43,721,'ЖИВОЙ ПОЛЕВОЙ ОПРЕДЕЛИТЕЛЬ',13,'Body','#BCF0EC')
+    text(c,42,210,'Faraana  /  Temple  /  Ras Katy  /  Рас-Ум-Сид',11,'Bold','#A9E3DD')
+    text(c,42,172,f'{len(species)} видов и групп  •  настоящие подводные фотографии',11,'Bold','#FFFFFF')
+    wrapped(c,'Кораллы, рыбы, скаты, моллюски и ракообразные. Иллюстрированные карточки, места обитания, признаки и авторство каждого фото.',42,138,510,10.4,16,3,'#E1F3F1')
+    text(c,42,48,'OFFLINE  •  OPEN SOURCE  •  v0.2',10,'Bold','#F9CF86')
     c.showPage();page+=1
     page_header('Как пользоваться',page)
     blocks=[('Плато Faraana','Проверяй молодые колонии, моллюсков, хирургов, спинорогов. Не наступай на риф.'),('Temple','Колонны и щели: крылатки, мягкие кораллы, антиасы, укрытия мурен.'),('Ras Katy','Песчаные окна: бычки с креветками, скаты, рыбы-крокодилы.'),('У внешней стенки','Возможны наполеоны, черепахи, орляки; манта — редкая удача в открытой воде.')]
@@ -206,6 +247,26 @@ def build_pdf(species,manifest,dest):
         text(c,32,y,a,14,'Bold',C_TEAL);wrapped(c,b,32,y-22,525,11,16,3);y-=120
     wrapped(c,'Безопасность: сильные течения бывают даже при гладкой воде. Не касайся кораллов, моллюсков и рыб. За мысами и возле катеров не плавай в одиночку; используй буй.',32,194,520,11,17,5,color='#B94841')
     c.showPage();page+=1
+    # Extra full-color pages, using the same attribution-preserving in-situ images.
+    highlights=[('acropora-spp','СИНИЕ АКРОПОРЫ'),('mobula-birostris','ОКЕАНИЧЕСКАЯ МАНТА'),
+                ('octopus-cyanea','ОСЬМИНОГ'),('aetobatus-ocellatus','ОРЛЯК'),
+                ('tridacna-maxima','ТРИДАКНА'),('pterois-miles','КРЫЛАТКА')]
+    shown=[]
+    for species_id,label in highlights:
+        found=next((v for v in species if v['id']==species_id),None)
+        if not found:continue
+        photos=[p for p in manifest.get(species_id,[]) if (ROOT/p.get('local_path','')).exists()]
+        if photos:shown.append((found,label,photos[0]))
+    for k in range(0,len(shown),2):
+        page_header('МОРСКИЕ ВСТРЕЧИ • ФОТОГАЛЕРЕЯ',page)
+        for j,(found,label,ph) in enumerate(shown[k:k+2]):
+            y=H-125-j*350
+            c.setFillColor(HexColor('#E5F2F2'));c.roundRect(26,y-320,W-52,318,12,fill=1,stroke=0)
+            image_fit(c,ROOT/ph['local_path'],35,y-249,525,239)
+            text(c,40,y-275,label,15,'Bold',C_NAVY)
+            text(c,40,y-295,found['scientific'],10,'Italic',C_TEAL)
+            text(c,40,y-311,'Фото: '+ph['author'][:64],7,'Body',C_MUTED)
+        c.showPage();page+=1
     section_order=[('coral','КОРАЛЛЫ И СТРЕКАЮЩИЕ'),('fish','РЫБЫ И СКАТЫ'),('mollusc','МОЛЛЮСКИ'),('crust','РАКООБРАЗНЫЕ')]
     code_to_title=dict(section_order)
     # One large photo per card, sometimes two; two cards per page for easy phone reading.
@@ -219,15 +280,15 @@ def build_pdf(species,manifest,dest):
                 text(c,37,top-31,entry['ru'],15,'Bold',C_NAVY)
                 text(c,37,top-50,entry['scientific'],10,'Italic',C_TEAL)
                 srcs=[p for p in manifest.get(entry['id'],[]) if (ROOT/p.get('local_path','')).exists()]
-                photo_width=245 if len(srcs)>1 else 350
+                photo_width=165 if len(srcs)>2 else (252 if len(srcs)>1 else 510)
                 if srcs:
                     # image cards have fixed footprint and cannot overlap the title/description
                     start_x=38
-                    for pi,photo in enumerate(srcs[:2]):
+                    for pi,photo in enumerate(srcs[:3]):
                         box_x=start_x+pi*(photo_width+9)
                         c.setFillColor(HexColor('#DDE9E9'));c.roundRect(box_x,top-229,photo_width,165,7,stroke=0,fill=1)
                         image_fit(c,ROOT/photo['local_path'],box_x+4,top-225,photo_width-8,157)
-                        text(c,box_x+1,top-241,f'Фото {pi+1}: {photo["author"][:45]}',7,'Body',C_MUTED)
+                        text(c,box_x+1,top-241,f'Фото {pi+1}: {photo["author"][:27]}',7,'Body',C_MUTED)
                 else:
                     c.setFillColor(HexColor('#E4ECEC'));c.roundRect(38,top-231,516,165,8,stroke=0,fill=1)
                     wrapped(c,'Нет проверенной свободной фотографии. Не подменяем её иллюстрацией другого вида.',59,top-143,460,11,16,3,C_MUTED)
