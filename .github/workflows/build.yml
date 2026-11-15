@@ -1,6 +1,12 @@
 name: Build offline Red Sea photo guide
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+      - 'data/species.json'
+      - 'data/curated.json'
+      - '.github/workflows/build.yml'
 permissions:
   contents: read
 jobs:
@@ -36,6 +42,24 @@ jobs:
           missing=[f"{x['ru']} ({x['scientific']})" for x in s if not m.get(x['id'])]
           pathlib.Path('output/MISSING_PHOTOS.txt').write_text('No matching freely reusable photo on Commons:\n'+'\n'.join(missing),encoding='utf8')
           print('With photo:',len(s)-len(missing),'/',len(s))
+          PY
+      - name: Validate photo references and output
+        run: |
+          python - <<'PY'
+          import csv, json, pathlib, re
+          photos=list(csv.DictReader(open('output/PHOTO_CREDITS.csv',encoding='utf-8-sig')))
+          species=json.loads(pathlib.Path('data/species.json').read_text('utf8'))
+          manifest=json.loads(pathlib.Path('data/manifest.json').read_text('utf8'))
+          count=sum(bool(manifest.get(s['id'])) for s in species)
+          bad=re.compile(r'\b(?:museum|aquarium|specimen|naturalis|rmnh|mnhn|taxidermy|bleached|coral skeleton|drawing|illustration|fossil)\b',re.I)
+          wrong=[p['filename'] for p in photos if bad.search(p['filename'])]
+          pdf=pathlib.Path('output/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf')
+          print('Selected photos:',len(photos),'Taxa with photos:',count,'of',len(species),'PDF bytes:',pdf.stat().st_size)
+          print('Unwanted filenames:',wrong[:20])
+          assert len(photos)>=150, 'Too few photos for the illustrated guide'
+          assert count>=80, 'Too few represented taxa'
+          assert not wrong, 'Reject museum/specimen/drawing/bleached photo files'
+          assert pdf.read_bytes()[:5]==b'%PDF-', 'PDF is malformed'
           PY
       - uses: actions/upload-artifact@v4
         with:
