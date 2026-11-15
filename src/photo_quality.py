@@ -21,6 +21,12 @@ POSITIVE_CONTEXT = (
 
 def bad_metadata(filename, description):
     """Reject explicitly captive, preserved, skeletal, or illustrated subjects."""
+    # Natural-history collections often omit the word "museum" from the title.
+    text=(filename+' '+description).casefold()
+    if any(token in text for token in ('naturalis','mnhn','rmnh','smithsonian',
+             'biodiversity center','natural history museum',
+             'museum collection','zoological collection','preserved specimen')):
+        return True
     return bool(SUSPECT_FILENAME.search(filename) or BAD_CONTEXT.search(description))
 
 def metadata_bonus(value):
