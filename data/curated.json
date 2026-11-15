@@ -1,10 +1,15 @@
 {
-  "acropora-spp": [
-    "Coral (Acropora hemprichii), Ras Katy, Sharm el-Sheij, Egipto, 2022-03-26, DD 108.jpg",
-    "Coral (Acropora hemprichii), Ras Katy, Sharm el-Sheij, Egipto, 2022-03-26, DD 87.jpg"
+  "pomacanthus-imperator": [
+    "Pez ángel emperador (Pomacanthus imperator), mar Rojo, Egipto, 2023-04-17, DD 104.jpg"
   ],
-  "sarcophyton-spp": [
-    "Coral (Sarcophyton glaucum), Ras Katy, Sharm el-Sheij, Egipto, 2022-03-26, DD 113.jpg"
+  "pygoplites-diacanthus": [
+    "Pez ángel real (Pygoplites diacanthus), parque nacional Ras Muhammad, Egipto, 2022-03-26, DD 155.jpg"
+  ],
+  "chaetodon-semilarvatus": [
+    "Pez mariposa del mar Rojo (Chaetodon semilarvatus), mar Rojo, Egipto, 2023-04-15, DD 102.jpg"
+  ],
+  "plerogyra-sinuosa": [
+    "Coral burbuja (Plerogyra sinuosa), mar Rojo, Egipto, 2023-04-17, DD 11.jpg"
   ],
   "xenia-spp": [
     "Coral pulsante (Xenia umbellata), Ras Katy, Sharm el-Sheij, Egipto, 2022-03-26, DD 96.jpg"
@@ -12,5 +17,24 @@
   "tridacna-maxima": [
     "Almeja gigante (Tridacna maxima), mar Rojo, Egipto, 2023-04-18, DD 104.jpg",
     "Almeja gigante (Tridacna maxima), mar Rojo, Egipto, 2023-04-18, DD 74.jpg"
+  ],
+  "phyllidia-varicosa": [
+    "Babosa de mar (Phyllidia varicosa), parque nacional Ras Muhammad, Egipto, 2022-03-27, DD 83.jpg",
+    "Babosa de mar (Phyllidia varicosa), parque nacional Ras Muhammad, Egipto, 2022-03-27, DD 82.jpg"
+  ],
+  "octopus-cyanea": [
+    "Pulpo azul (Octopus cyanea), Nosy Tanikely, Madagascar, 2025-09-19, DD 60.jpg"
+  ],
+  "pterois-miles": [
+    "Pez fuego diablo (Pterois miles), Zanzíbar, Tanzania, 2024-06-01, DD 86.jpg"
+  ],
+  "panulirus-versicolor": [
+    "Langosta pintada (Panulirus versicolor), Zanzíbar, Tanzania, 2024-06-01, DD 150.jpg"
+  ],
+  "echinopora-lamellosa": [
+    "Echinopora lamellosa, Poruma.JPG"
+  ],
+  "eretmochelys-imbricata": [
+    "Tortuga carey (Eretmochelys imbricata), parque nacional Ras Muhammad, Egipto, 2022-03-28, DD 28.jpg"
   ]
 }
