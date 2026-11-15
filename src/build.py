@@ -99,6 +99,11 @@ def find_images(species, per_species, curated):
         desc=clean_html(meta.get('ImageDescription',{}).get('value',''))+' '+clean_html(meta.get('ObjectName',{}).get('value',''))
         if bad_metadata(name,desc): continue
         n=normalize(name);d=normalize(desc)
+        # The guide covers the Red Sea; Caribbean Acropora palmata and
+        # A. cervicornis must not illustrate local branching corals.
+        if key=='acropora-spp' and any(carib in n for carib in
+            ('acropora palmata','acropora cervicornis','acropora prolifera')):
+            continue
         # A mere mention in unrelated description must not misidentify the subject.
         if name not in fixed:
             if generic:
@@ -254,7 +259,7 @@ def build_pdf(species,manifest,dest):
     wrapped(c,'Безопасность: сильные течения бывают даже при гладкой воде. Не касайся кораллов, моллюсков и рыб. За мысами и возле катеров не плавай в одиночку; используй буй.',32,194,520,11,17,5,color='#B94841')
     c.showPage();page+=1
     # Extra full-color pages, using the same attribution-preserving in-situ images.
-    highlights=[('acropora-spp','СИНИЕ АКРОПОРЫ'),('mobula-birostris','ОКЕАНИЧЕСКАЯ МАНТА'),
+    highlights=[('acropora-spp','АКРОПОРЫ КРАСНОГО МОРЯ'),('mobula-birostris','ОКЕАНИЧЕСКАЯ МАНТА'),
                 ('octopus-cyanea','ОСЬМИНОГ'),('aetobatus-ocellatus','ОРЛЯК'),
                 ('tridacna-maxima','ТРИДАКНА'),('pterois-miles','КРЫЛАТКА')]
     shown=[]
