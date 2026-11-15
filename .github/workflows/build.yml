@@ -12,7 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,11 +28,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            assets/*.jpg
+            assets/v2/*.jpg
             data/manifest.json
-          key: commons-photos-${{ hashFiles('data/species.json', 'data/curated.json') }}
+          key: commons-v2-${{ hashFiles('src/build.py', 'src/photo_quality.py', 'data/species.json', 'data/curated.json') }}
       - name: Fetch Wikimedia photographs and build PDF
-        run: python src/build.py --photos 2
+        run: python src/build.py --photos 3
       - name: Generate photo coverage report
         run: |
           python - <<'PY'
@@ -40,14 +40,16 @@ jobs:
           p=pathlib.Path('data/species.json');s=json.loads(p.read_text())
           m=json.loads(pathlib.Path('data/manifest.json').read_text())
           missing=[f"{x['ru']} ({x['scientific']})" for x in s if not m.get(x['id'])]
-          pathlib.Path('output/MISSING_PHOTOS.txt').write_text('No matching freely reusable photo on Commons:\n'+'\n'.join(missing),encoding='utf8')
+          pathlib.Path('output/MISSING_PHOTOS.txt
+            data/manifest.json').write_text('No matching freely reusable photo on Commons:\n'+'\n'.join(missing),encoding='utf8')
           print('With photo:',len(s)-len(missing),'/',len(s))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: red-sea-offline-photo-guide
+          name: red-sea-photo-guide-v02
           path: |
             output/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf
             output/PHOTO_CREDITS.csv
+            output/PHOTO_QA.csv
             output/MISSING_PHOTOS.txt
           retention-days: 90
