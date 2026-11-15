@@ -1,4 +1,4 @@
-name: Publish offline guide to GitHub Releases
+name: Publish open Red Sea photo field guide
 
 on:
   push:
@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       run_id:
-        description: 'Successful Build offline Red Sea photo guide workflow run ID'
+        description: 'Successful photo guide build run ID'
         type: string
         required: true
-        default: '43364354562'
+        default: '43724243838'
       tag:
-        description: 'New release tag (e.g. v0.2.0)'
+        description: 'New release tag (for example v0.3.0)'
         type: string
         required: true
-        default: 'v0.1.0'
+        default: 'v0.2.0'
 
 permissions:
   contents: write
@@ -25,53 +25,70 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Download verified successful artifact
+      - name: Download verified PDF build
         uses: actions/download-artifact@v4
         with:
-          name: red-sea-offline-photo-guide
+          name: red-sea-photo-guide-v02
           repository: andreykulakovskiy/red-sea-field-guide
-          run-id: ${{ inputs.run_id || '43364354562' }}
+          run-id: ${{ inputs.run_id || '43724243838' }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: release
-      - name: Validate files before release
+      - name: Validate PDF and copy release files
         run: |
-          test -s release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf
-          test -s release/PHOTO_CREDITS.csv
-          test -f release/MISSING_PHOTOS.txt
+          set -euo pipefail
           python - <<'PY'
+          import csv, json, shutil
           from pathlib import Path
-          p = Path('release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf')
-          assert p.read_bytes()[:5] == b'%PDF-'
-          print(f'Validated PDF ({p.stat().st_size / 1024**2:.1f} MiB) and photo credits')
+          root=Path('release'); out=root/'output'; dst=Path('dist')
+          dst.mkdir(exist_ok=True)
+          names=['Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf','PHOTO_CREDITS.csv','PHOTO_QA.csv','MISSING_PHOTOS.txt']
+          for n in names:
+              source=out/n
+              if not source.is_file(): raise SystemExit(f'Missing artifact file: {source}')
+              shutil.copy2(source,dst/n)
+          shutil.copy2(root/'data'/'manifest.json',dst/'PHOTO_MANIFEST.json')
+          pdf=dst/names[0]
+          if pdf.read_bytes()[:5]!=b'%PDF-':raise SystemExit('Not a PDF')
+          manifest=json.loads((root/'data'/'manifest.json').read_text(encoding='utf8'))
+          count=sum(len(x) for x in manifest.values())
+          taxa=sum(bool(x) for x in manifest.values())
+          credits=list(csv.DictReader((out/'PHOTO_CREDITS.csv').open(encoding='utf-8-sig')))
+          if count<200 or taxa<80 or len(credits)!=count:raise SystemExit('Photo coverage inadequate')
+          print(f'Validated {count} photos for {taxa} taxa; PDF {pdf.stat().st_size/1048576:.1f} MiB')
           PY
-      - name: Publish permanent release assets
+      - name: Publish permanent GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ inputs.tag || 'v0.1.0' }}
+          RELEASE_TAG: ${{ inputs.tag || 'v0.2.0' }}
         run: |
           set -euo pipefail
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release $RELEASE_TAG already exists; refusing to overwrite it"
+            echo "Release $RELEASE_TAG already exists; refusing to overwrite"
             exit 1
           fi
           cat > /tmp/release-notes.md <<'EOF'
-          Русскоязычный офлайн-определитель кораллов, рыб, моллюсков и ракообразных для Faraana Reef, Temple и Ras Katy (Шарм-эль-Шейх).
+          # Красное море — полевой определитель v0.2.0
 
-          - 98 видов и групп, 66 страниц.
-          - 190 реальных фотографий из Wikimedia Commons прямо внутри PDF.
-          - Для 95 из 98 позиций найдены фотографии; список остальных приложен.
-          - Полная информация об авторах и условиях использования снимков — в PDF и PHOTO_CREDITS.csv.
-          - PDF работает без интернета, в том числе на телефоне.
+          Переработанный русскоязычный офлайн-определитель для Faraana, Temple и Ras Katy в Шарм-эль-Шейхе.
 
-          Важно: это любительский практический определитель, а не научная инвентаризация или гарантия встречи видов. Для родов могут быть показаны представители рода. Идентификация некоторых организмов по фото бывает неоднозначной.
+          - **74 страницы, 98 видов и групп, 270 реальных фото из Wikimedia Commons**.
+          - Фото есть для **91 позиции**; семь честно оставлены без изображений.
+          - До трёх снимков на карточку, более крупные фотографии и новая фотогалерея.
+          - Исключены известные музейные экспонаты, аквариумные манты, рисунки, чучела, научные схемы и неправильные совпадения.
+          - Все снимки встроены в PDF: он работает **без интернета**.
+          - В `PHOTO_CREDITS.csv` указаны авторы и лицензии, в `PHOTO_QA.csv` — результаты автоматической проверки. `PHOTO_MANIFEST.json` содержит ссылки на первоисточники.
 
-          Исходники и инструкции по сборке: https://github.com/andreykulakovskiy/red-sea-field-guide
+          Это любительский практический справочник; фотографический отбор не гарантирует безошибочной идентификации. Каждый снимок сохраняет собственную открытую лицензию. О замеченных ошибках можно сообщить через Issues.
+
+          Исходники: https://github.com/andreykulakovskiy/red-sea-field-guide
           EOF
           gh release create "$RELEASE_TAG" \
-            release/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf \
-            release/PHOTO_CREDITS.csv \
-            release/MISSING_PHOTOS.txt \
+            dist/Red_Sea_Field_Guide_OFFLINE_PHOTOS_RU.pdf \
+            dist/PHOTO_CREDITS.csv \
+            dist/PHOTO_QA.csv \
+            dist/MISSING_PHOTOS.txt \
+            dist/PHOTO_MANIFEST.json \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Красное море — офлайн-определитель $RELEASE_TAG" \
+            --title "Красное море — яркий офлайн-определитель $RELEASE_TAG" \
             --notes-file /tmp/release-notes.md
