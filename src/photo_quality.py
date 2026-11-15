@@ -23,7 +23,12 @@ def bad_metadata(filename, description):
     """Reject explicitly captive, preserved, skeletal, or illustrated subjects."""
     # Natural-history collections often omit the word "museum" from the title.
     text=(filename+' '+description).casefold()
-    if any(token in text for token in ('naturalis','mnhn','rmnh','smithsonian',
+    if any(token in text for token in (
+             'aqua park','aquapark','aquatic park','aqua world',
+             'conchologia iconica','illustrations of the shells',
+             'aquarium park','oceanarium','oceanic aquarium','ocean park',
+             'sealife centre','sea life centre','aquarium exhibit',
+             'naturalis','mnhn','rmnh','smithsonian',
              'biodiversity center','natural history museum',
              'museum collection','zoological collection','preserved specimen')):
         return True
