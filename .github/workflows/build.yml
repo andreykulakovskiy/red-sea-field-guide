@@ -1,12 +1,6 @@
 name: Build offline Red Sea photo guide
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'src/**'
-      - 'data/species.json'
-      - 'data/curated.json'
-      - '.github/workflows/build.yml'
 permissions:
   contents: read
 jobs:
@@ -40,8 +34,7 @@ jobs:
           p=pathlib.Path('data/species.json');s=json.loads(p.read_text())
           m=json.loads(pathlib.Path('data/manifest.json').read_text())
           missing=[f"{x['ru']} ({x['scientific']})" for x in s if not m.get(x['id'])]
-          pathlib.Path('output/MISSING_PHOTOS.txt
-            data/manifest.json').write_text('No matching freely reusable photo on Commons:\n'+'\n'.join(missing),encoding='utf8')
+          pathlib.Path('output/MISSING_PHOTOS.txt').write_text('No matching freely reusable photo on Commons:\n'+'\n'.join(missing),encoding='utf8')
           print('With photo:',len(s)-len(missing),'/',len(s))
           PY
       - uses: actions/upload-artifact@v4
@@ -52,4 +45,5 @@ jobs:
             output/PHOTO_CREDITS.csv
             output/PHOTO_QA.csv
             output/MISSING_PHOTOS.txt
+            data/manifest.json
           retention-days: 90
